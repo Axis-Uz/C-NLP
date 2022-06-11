@@ -3,6 +3,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "analysis.c"
+
 extern void semantics(char user_words[500][20], int num_of_words);
 extern void sentiment(char user_words[500][20], int num_of_words);
 
@@ -66,7 +68,8 @@ int get_words(char arr[][20])
 int main(void)
 {
 	char user_words[500][20];
-	int total_words;
-	total_words = get_words(user_words);
-	print_array(user_words, total_words);
+	int total_words = 0;
+	semantics(user_words, total_words);
+	// total_words = get_words(user_words);
+	// print_array(user_words, total_words);
 }
