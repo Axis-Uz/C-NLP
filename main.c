@@ -8,7 +8,7 @@
 extern void semantics(char user_words[500][20], int num_of_words);
 extern void sentiment(char user_words[500][20], int num_of_words);
 
-void print_array(char arr[][20], int end)
+void printArray(char arr[][20], int end)
 {
 	// Print array which contains user words
 	for (int i = 0; i < end; i++)
@@ -17,7 +17,7 @@ void print_array(char arr[][20], int end)
 	}
 }
 
-void remove_symbols(char arr[])
+void removeSymbols(char arr[])
 {
 	// Replace symbols with spaces in the given array.
 	for (int i = 0; i < strlen(arr); i++)
@@ -37,7 +37,7 @@ void remove_symbols(char arr[])
 	}
 }
 
-int get_words(char arr[][20])
+int getWords(char arr[][20])
 {
 	// Get words from stdin, lowers them and then places them in the array and returns the total number of words inputted.
 	char words[500][20]; //['someone','nowhere']
@@ -46,14 +46,14 @@ int get_words(char arr[][20])
 	fflush(stdin);
 	for (int i = 0; i < 500; i++)
 	{
-		char letters[20];
+		char letters[20]; //['s','o','m','e']
 		scanf("%s", letters);
 		if (*letters == '|')
 		{
 			break;
 		}
 
-		remove_symbols(letters);
+		removeSymbols(letters);
 		strcpy(words[i], letters);
 		for (int j = 0; j <= strlen(letters); j++)
 		{
@@ -69,7 +69,6 @@ int main(void)
 {
 	char user_words[500][20];
 	int total_words = 0;
+	total_words = getWords(user_words);
 	semantics(user_words, total_words);
-	// total_words = get_words(user_words);
-	// print_array(user_words, total_words);
 }
