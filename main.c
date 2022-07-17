@@ -8,15 +8,6 @@
 extern void semantics(char user_words[500][20], int num_of_words);
 extern void sentiment(char user_words[500][20], int num_of_words);
 
-void printArray(char arr[][20], int end)
-{
-	// Print array which contains user words
-	for (int i = 0; i < end; i++)
-	{
-		printf("|%s|\n", arr[i]);
-	}
-}
-
 void removeSymbols(char arr[])
 {
 	// Replace symbols with spaces in the given array.
@@ -42,7 +33,7 @@ int getWords(char arr[][20])
 	// Get words from stdin, lowers them and then places them in the array and returns the total number of words inputted.
 	char words[500][20]; //['someone','nowhere']
 	int num_of_words = 0;
-	printf("Enter words(to stop 'space+|'):\n  >");
+	printf("\nEnter words(to stop 'space+|'):\n>>");
 	fflush(stdin);
 	for (int i = 0; i < 500; i++)
 	{
@@ -68,7 +59,37 @@ int getWords(char arr[][20])
 int main(void)
 {
 	char user_words[500][20];
-	int total_words = 0;
-	total_words = getWords(user_words);
-	semantics(user_words, total_words);
+	int choice, total_words = 0;
+	printf("\n\n<<< Semantic and Sentiment Analysis of Text >>>");
+	printf("\n!! Semantics Analysis is only available for Computer Science, Physics, Biology and Chemistry.");
+	printf("\n!! Sentiment Analysis is only available for Positive and Negative.\n");
+	sleep(1.5);
+
+	while (1)
+	{
+		printf("Analysis on: \n1.Semantics\t2.Sentiment\t3.Quit\n");
+		printf("Input Index Number > ");
+		scanf("%d", &choice);
+		switch (choice)
+		{
+		case 1:
+			total_words = getWords(user_words);
+			semantics(user_words, total_words);
+			break;
+
+		case 2:
+			total_words = getWords(user_words);
+			sentiment(user_words, total_words);
+			break;
+		case 3:
+			printf("\n !! Quitting !!\n");
+			sleep(1);
+			exit(0);
+			break;
+
+		default:
+			printf("\n!!(main.c)<main>--Default Switch.");
+			break;
+		}
+	}
 }

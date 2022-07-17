@@ -73,9 +73,8 @@ int compareArr(char arr[][20], int end_line, char input[][20], int total_words)
 void semantics(char user_words[500][20], int num_of_words)
 {
     // Semantics analysis of text, categorizing text according the topic.
-    int result[5] = {0, 0, 0, 0, 0},
-        unkown_words, exclusion[500];
-    float unkown_percent, percent[5] = {0, 0, 0, 0, 0};
+    int result[5] = {0, 0, 0, 0, 0}, unknown_words;
+    float unknown_percent, percent[5] = {0, 0, 0, 0, 0};
 
     int fun_line, comp_line, phy_line, bio_line, chem_line;
     fun_line = lineCount("fun.csv");
@@ -103,15 +102,15 @@ void semantics(char user_words[500][20], int num_of_words)
         percent[i] = result[i] * 100 / num_of_words;
     }
 
-    unkown_words = num_of_words - (result[0] + result[1] + result[2] + result[3] + result[4]);
-    unkown_percent = 100 - (percent[0] + percent[1] + percent[2] + percent[3] + percent[4]);
+    unknown_words = num_of_words - (result[0] + result[1] + result[2] + result[3] + result[4]);
+    unknown_percent = 100 - (percent[0] + percent[1] + percent[2] + percent[3] + percent[4]);
 
     printf("\n  Function    : %.2f%% (%d)", percent[0], result[0]);
+    printf("\n  Unknown     : %.2f%% (%d)", unknown_percent, unknown_words);
     printf("\n  CS          : %.2f%% (%d)", percent[1], result[1]);
     printf("\n  Physics     : %.2f%% (%d)", percent[2], result[2]);
-    printf("\n  Biology     : %.2f%% (%d)", percent[3], result[3]);
     printf("\n  Chemistry   : %.2f%% (%d)", percent[4], result[4]);
-    printf("\n  Unknown     : %.2f%% (%d)", unkown_percent, unkown_words);
+    printf("\n  Biology     : %.2f%% (%d)", percent[3], result[3]);
     printf("\n  Total Words : %d", num_of_words);
 
     printf("\n The sentence seems to be related to: ");
@@ -144,4 +143,54 @@ void semantics(char user_words[500][20], int num_of_words)
 
 void sentiment(char user_words[500][20], int num_of_words)
 {
+    // Sentiment analysis of text, categorizing text into positive and negative
+    int result[3] = {0, 0, 0}, unknown_words;
+    float unknown_percent, percent[3] = {0, 0, 0};
+    int fun_line, pos_line, neg_line;
+    fun_line = lineCount("fun.csv");
+    pos_line = lineCount("positive.csv");
+    neg_line = lineCount("negative.csv");
+
+    char fun_words[fun_line][20], pos_words[pos_line][20], neg_words[neg_line][20];
+
+    readFile("fun.csv", fun_line, fun_words);
+    readFile("positive.csv", pos_line, pos_words);
+    readFile("negative.csv", neg_line, neg_words);
+
+    result[0] = compareArr(fun_words, fun_line, user_words, num_of_words);
+    result[1] = compareArr(pos_words, pos_line, user_words, num_of_words);
+    result[2] = compareArr(neg_words, neg_line, user_words, num_of_words);
+
+    for (int i = 0; i < 3; i++)
+    {
+        percent[i] = result[i] * 100 / num_of_words;
+    }
+
+    unknown_words = num_of_words - (result[0] + result[1] + result[2]);
+    unknown_percent = 100 - (percent[0] + percent[1] + percent[2]);
+
+    printf("\n  Function    : %.2f%% (%d)", percent[0], result[0]);
+    printf("\n  Unknown     : %.2f%% (%d)", unknown_percent, unknown_words);
+    printf("\n  Positive    : %.2f%% (%d)", percent[1], result[1]);
+    printf("\n  Negative    : %.2f%% (%d)", percent[2], result[2]);
+    printf("\n  Total Words : %d", num_of_words);
+
+    printf("\n The sentence seems to be related to: ");
+    if (percent[1] > percent[2])
+    {
+        printf("Positive.\n");
+    }
+    else if (percent[2] > percent[1])
+    {
+        printf("Negative.\n");
+    }
+    else if (percent[1] == percent[2])
+    {
+        printf("All topics.\n");
+    }
+    else
+    {
+        printf("UNKOWN.\n");
+        printf("Sorry.. can't figure it out.\nPlease try something else.");
+    }
 }
