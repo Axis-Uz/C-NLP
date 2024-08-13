@@ -1,14 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include <unistd.h>
+// #include <ctype.h>
+// #include <unistd.h>
 
 int lineCount(char *file_name)
 {
     // Count the number of line in files.
-    char temp;
-    int num_of_line;
+    int num_of_line = 0;
     FILE *file_pointer = fopen(file_name, "r");
     if (file_pointer == NULL)
     {
@@ -16,7 +15,7 @@ int lineCount(char *file_name)
     }
     else
     {
-        temp = fgetc(file_pointer);
+        char temp = fgetc(file_pointer);
         while (temp != EOF)
         {
             if (temp == '\n')
@@ -42,25 +41,26 @@ void readFile(char *file_name, int end_line, char arr_words[][20])
     }
     else
     {
+
         for (int f = 0; f < end_line; f++)
         {
             fscanf(file_pointer, "%s", temp_str);
             strcpy(&arr_words[f][20], temp_str);
         }
     }
+
     fclose(file_pointer);
 }
 
 int compareArr(char arr[][20], int end_line, char input[][20], int total_words)
 {
     // It compare second array with first array and return the number of same words in both array.
-    int compare;
     int result = 0;
     for (int i = 0; i < total_words; i++)
     {
         for (int loop = 0; loop < end_line; loop++)
         {
-            compare = strcmp(input[i], arr[loop]);
+            int compare = strcmp(input[i], arr[loop]);
             if (compare == 0)
             {
                 result += 1;
@@ -73,15 +73,14 @@ int compareArr(char arr[][20], int end_line, char input[][20], int total_words)
 void semantics(char user_words[500][20], int num_of_words)
 {
     // Semantics analysis of text, categorizing text according the topic.
-    int result[5] = {0, 0, 0, 0, 0}, unknown_words;
-    float unknown_percent, percent[5] = {0, 0, 0, 0, 0};
+    int result[5] = {0, 0, 0, 0, 0};
+    float percent[5] = {0, 0, 0, 0, 0};
 
-    int fun_line, comp_line, phy_line, bio_line, chem_line;
-    fun_line = lineCount("fun.csv");
-    comp_line = lineCount("comp.csv");
-    phy_line = lineCount("phy.csv");
-    bio_line = lineCount("bio.csv");
-    chem_line = lineCount("chem.csv");
+    const int fun_line = lineCount("fun.csv");
+    const int comp_line = lineCount("comp.csv");
+    const int phy_line = lineCount("phy.csv");
+    const int bio_line = lineCount("bio.csv");
+    const int chem_line = lineCount("chem.csv");
     char fun_words[fun_line][20], comp_words[comp_line][20],
         phy_words[phy_line][20], bio_words[bio_line][20], chem_words[chem_line][20];
 
@@ -102,8 +101,8 @@ void semantics(char user_words[500][20], int num_of_words)
         percent[i] = result[i] * 100 / num_of_words;
     }
 
-    unknown_words = num_of_words - (result[0] + result[1] + result[2] + result[3] + result[4]);
-    unknown_percent = 100 - (percent[0] + percent[1] + percent[2] + percent[3] + percent[4]);
+    const int unknown_words = num_of_words - (result[0] + result[1] + result[2] + result[3] + result[4]);
+    const float unknown_percent = 100 - (percent[0] + percent[1] + percent[2] + percent[3] + percent[4]);
 
     printf("\n  Function    : %.2f%% (%d)", percent[0], result[0]);
     printf("\n  Unknown     : %.2f%% (%d)", unknown_percent, unknown_words);
@@ -144,12 +143,12 @@ void semantics(char user_words[500][20], int num_of_words)
 void sentiment(char user_words[500][20], int num_of_words)
 {
     // Sentiment analysis of text, categorizing text into positive and negative
-    int result[3] = {0, 0, 0}, unknown_words;
-    float unknown_percent, percent[3] = {0, 0, 0};
-    int fun_line, pos_line, neg_line;
-    fun_line = lineCount("fun.csv");
-    pos_line = lineCount("positive.csv");
-    neg_line = lineCount("negative.csv");
+    int result[3] = {0, 0, 0};
+    float percent[3] = {0, 0, 0};
+
+    const int fun_line = lineCount("fun.csv");
+    const int pos_line = lineCount("positive.csv");
+    const int neg_line = lineCount("negative.csv");
 
     char fun_words[fun_line][20], pos_words[pos_line][20], neg_words[neg_line][20];
 
@@ -166,8 +165,8 @@ void sentiment(char user_words[500][20], int num_of_words)
         percent[i] = result[i] * 100 / num_of_words;
     }
 
-    unknown_words = num_of_words - (result[0] + result[1] + result[2]);
-    unknown_percent = 100 - (percent[0] + percent[1] + percent[2]);
+    const int unknown_words = num_of_words - (result[0] + result[1] + result[2]);
+    const float unknown_percent = 100 - (percent[0] + percent[1] + percent[2]);
 
     printf("\n  Function    : %.2f%% (%d)", percent[0], result[0]);
     printf("\n  Unknown     : %.2f%% (%d)", unknown_percent, unknown_words);
